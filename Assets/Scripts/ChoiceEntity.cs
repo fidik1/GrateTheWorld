@@ -6,13 +6,11 @@ public class ChoiceEntity : MonoBehaviour
     [SerializeField] private Entity _entity;
     [SerializeField] private EntityMove _entityMove;
 
-    public Action StartGame;
-    public bool GameStarted { get; private set; }
+    public Action EntityChoosed;
 
     public void Choice(EntityData entity)
     {
         _entity.UpdateObject(entity);
-        StartGame?.Invoke();
-        GameStarted = true;
+        EntityChoosed?.Invoke();
     }
 }

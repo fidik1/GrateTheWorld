@@ -1,6 +1,6 @@
 using UnityEngine;
 
-[CreateAssetMenu(fileName="Vegetable", menuName="Vegetable")]
+[CreateAssetMenu(fileName="Entity", menuName="Entity")]
 public class EntityData : ScriptableObject
 {
     [field: SerializeField] public Mesh Model { get; private set; }

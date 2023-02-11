@@ -5,17 +5,35 @@ using UnityEngine;
 public class UIController : MonoBehaviour
 {
     [SerializeField] private ChoiceEntity _choiceEntity;
-    [SerializeField] private GameObject _canvasMain, _canvasChoice, _textHoldToPlay;
-    [SerializeField] private Animator _textAnimator;
+    [SerializeField] private GameObject _textHoldToPlay;
+
+    [SerializeField] private Animator _textHoldToPlayAnimator;
+    [SerializeField] private Animator _panelChoiceAnimator;
 
     private bool _firstClick;
 
-    private void OnEnable() => _choiceEntity.StartGame += OnStartGame;
+    private void OnEnable()
+    {
+        GameManager.Instance.GameStarted += OnStartGame;
+        GameManager.Instance.EndOfGame += OnEndGame;
+    }
+
+    private void OnDisable()
+    {
+        GameManager.Instance.GameStarted -= OnStartGame;
+        GameManager.Instance.EndOfGame -= OnEndGame;
+    }
 
     private void OnStartGame()
     {
-        _canvasChoice.SetActive(false);
-        _canvasMain.SetActive(true);
+        _panelChoiceAnimator.SetBool("Hide", true);
+        _textHoldToPlayAnimator.SetBool("StartGame", true);
+        StartCoroutine(PlayAnimation());
+    }
+
+    private void OnEndGame()
+    {
+        print("UICONTROLLER: END OF GAME");
     }
 
     public void OnPlay()
@@ -23,7 +41,13 @@ public class UIController : MonoBehaviour
         if (!_firstClick)
         {
             _firstClick = true;
-            _textAnimator.SetBool("isPlaying", true);
+            _textHoldToPlayAnimator.SetBool("isPlaying", true);
         }
+    }
+
+    private IEnumerator PlayAnimation()
+    {
+        yield return new WaitForSeconds(0.5f);
+        _textHoldToPlayAnimator.SetBool("Idle", true);
     }
 }

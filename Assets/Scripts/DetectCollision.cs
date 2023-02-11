@@ -4,15 +4,9 @@ using UnityEngine;
 
 public class DetectCollision : MonoBehaviour
 {
-    private Vector3 _startPosObject;
     public bool IsCollided { get; private set; }
-
-    private bool _canSlice = true;
-
-    private void Start()
-    {
-        _startPosObject = transform.position;
-    }
+    public Action Collided;
+    public Action Stay;
 
     private void OnTriggerEnter(Collider other)
     {
@@ -20,11 +14,14 @@ public class DetectCollision : MonoBehaviour
         {
             print("COLIDE");
             IsCollided = true;
+            Collided?.Invoke();
         }
     }
 
-    private void OnTriggerExit(Collider other)
+    private void OnTriggerStay(Collider other)
     {
-        IsCollided = false;
+        Stay?.Invoke();
     }
+
+    private void OnTriggerExit(Collider other) => IsCollided = false;
 }

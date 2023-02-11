@@ -24,9 +24,17 @@ public class EntityMove : MonoBehaviour
 
     public Action FingerReleased;
 
-    private void OnEnable() => _choiceEntity.StartGame += StartGame;
+    private void OnEnable()
+    {
+        GameManager.Instance.GameStarted += StartGame;
+        GameManager.Instance.EndOfGame += EndOfGame;
+    }
 
-    private void OnDisable() => _choiceEntity.StartGame -= StartGame;
+    private void OnDisable()
+    {
+        GameManager.Instance.GameStarted -= StartGame;
+        GameManager.Instance.EndOfGame -= EndOfGame;
+    }
 
     private void Start()
     {
@@ -53,7 +61,6 @@ public class EntityMove : MonoBehaviour
                     FingerReleased?.Invoke();
                     _fingerPressed = false;
                     _firstPress = true;
-                    
                 }
                 ReleaseFinger();
             }
@@ -64,7 +71,7 @@ public class EntityMove : MonoBehaviour
     {
         while (_fingerPressed)
         {
-            transform.DOMove(new Vector3(transform.position.x, transform.position.y - _shiftAmountY, transform.position.z), _animationDuration)
+            transform.DOMoveY(transform.position.y - _shiftAmountY, _animationDuration)
                 .SetRelative(true)
                 .SetEase(Ease.InOutQuad);
             if (_object.localPosition.x < _maxObjectPosX)
@@ -80,9 +87,15 @@ public class EntityMove : MonoBehaviour
     private void ReleaseFinger() 
     {
         print("RELEASE FINGER");
-        transform.DOMove(_startPos, 0.1f).SetEase(Ease.InOutQuad);
-        _object.DOLocalMove(_startPosObject, 0.1f).SetEase(Ease.InOutQuad);
+        transform.DOMove(_startPos, 0.15f);
+        _object.DOLocalMove(_startPosObject, 0.15f);
     }
 
     public void StartGame() => _isPlaying = true;
+    public void EndOfGame()
+    { 
+        _isPlaying = false;
+        _fingerPressed = false;
+        _firstPress = true;
+    }
 }
