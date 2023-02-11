@@ -12,5 +12,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 35c28faee37bbc342ac46bc74fff624f, type: 3}
   m_Name: Banana
   m_EditorClassIdentifier: 
+  <Icon>k__BackingField: {fileID: 920338402, guid: a9fa41b8ba13a8645bed45b67d8604c7, type: 3}
   <Model>k__BackingField: {fileID: 4300002, guid: 461f0170c82b53340a9812199b63bbd4, type: 3}
-  <Color>k__BackingField: {r: 1, g: 0.90713394, b: 0, a: 1}
+  <Color>k__BackingField: {r: 0.77647066, g: 0.45882356, b: 0.03137255, a: 1}
+  <Materials>k__BackingField:
+  - {fileID: 2100000, guid: 9f2340f5bddefd34b8c8b98900dca7a1, type: 2}
+  - {fileID: 2100000, guid: 070ef8c2bac3233489830eaf40348c89, type: 2}
+  - {fileID: 2100000, guid: bba7cba28d88a8246b9cbc542c0b5670, type: 2}
+  <Position>k__BackingField: {x: 1.1, y: -0.96, z: 0}
+  <Rotation>k__BackingField: {x: 40.9, y: 270, z: 0}
+  <PosColliderEnd>k__BackingField: {x: -1.95, y: 0.37, z: 0}
+  <PosColliderWin>k__BackingField: {x: -1.07, y: 0.37, z: 0}
+  <ScaleColliderEnd>k__BackingField: {x: 1, y: 3, z: 1}
+  <ScaleColliderWin>k__BackingField: {x: 0.79, y: 3, z: 1}

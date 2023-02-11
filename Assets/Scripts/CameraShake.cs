@@ -29,6 +29,7 @@ public class CameraShake : MonoBehaviour
     {
         while (_detectCollision.IsCollided)
         {
+            if (!GameState.Instance.IsPlaying) break;
             _cameraTransform.DOShakePosition(_shakeDuration, _shakeStrength, 10, 90, false, true);
             yield return new WaitForSeconds(_shakeDuration);
         }

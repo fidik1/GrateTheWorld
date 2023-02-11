@@ -7,6 +7,7 @@ public class EntityMove : MonoBehaviour
 {
     [SerializeField] private ChoiceEntity _choiceEntity;
     [SerializeField] private Transform _object;
+    [SerializeField] private DetectEntityWin _detectEntityWin;
 
     [SerializeField] private float _shiftAmountY = 4f;
     [SerializeField] private float _shiftAmount = 10f;
@@ -22,25 +23,27 @@ public class EntityMove : MonoBehaviour
     private bool _fingerPressed;
     private bool _isPlaying;
 
-    public Action FingerReleased;
+    public Action Slice;
+    public Action EntityHasSliced;
 
     private void OnEnable()
     {
-        print(GameManager.Instance);
-        GameManager.Instance.GameStarted += StartGame;
-        GameManager.Instance.EndOfGame += EndOfGame;
+        GameState.Instance.GameStarted += StartGame;
+        GameState.Instance.EndOfGame += EndOfGame;
+        GameState.Instance.GameRestarted += StartGame;
     }
 
     private void OnDisable()
     {
-        GameManager.Instance.GameStarted -= StartGame;
-        GameManager.Instance.EndOfGame -= EndOfGame;
+        GameState.Instance.GameStarted -= StartGame;
+        GameState.Instance.EndOfGame -= EndOfGame;
+        GameState.Instance.GameRestarted -= StartGame;
     }
 
     private void Start()
     {
         _startPos = transform.position;
-        _startPosObject = _object.localPosition;
+        _startPosObject = _object.transform.localPosition;
     }
 
     private void Update()
@@ -59,9 +62,14 @@ public class EntityMove : MonoBehaviour
             {
                 if (_fingerPressed)
                 {
-                    FingerReleased?.Invoke();
+                    Slice?.Invoke();
                     _fingerPressed = false;
                     _firstPress = true;
+                    if (_detectEntityWin.IsWin)
+                    {
+                        EntityHasSliced?.Invoke();
+                        _isPlaying = false;
+                    }
                 }
                 ReleaseFinger();
             }
@@ -87,14 +95,21 @@ public class EntityMove : MonoBehaviour
 
     private void ReleaseFinger() 
     {
-        print("RELEASE FINGER");
         transform.DOMove(_startPos, 0.15f);
         _object.DOLocalMove(_startPosObject, 0.15f);
     }
 
-    public void StartGame() => _isPlaying = true;
-    public void EndOfGame()
-    { 
+    private void StartGame()
+    {
+        _isPlaying = true;
+        transform.position = _startPos;
+        _object.position = _startPosObject;
+        _maxObjectPosX = 0.3f;
+    }
+
+    private void EndOfGame()
+    {
+        Slice?.Invoke();
         _isPlaying = false;
         _fingerPressed = false;
         _firstPress = true;

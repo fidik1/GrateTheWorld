@@ -10,13 +10,13 @@ public class MeshSlice : MonoBehaviour
     [SerializeField] private EntityMove _entityMove;
     [SerializeField] private DetectCollision _detectCollision;
 
-    private void OnEnable() => _entityMove.FingerReleased += OnFingerRelease;
+    private void OnEnable() => _entityMove.Slice += OnFingerRelease;
 
-    private void OnDisable() => _entityMove.FingerReleased -= OnFingerRelease;
+    private void OnDisable() => _entityMove.Slice -= OnFingerRelease;
 
     private void OnFingerRelease()
     {
-        if (_detectCollision.IsCollided)
+        if (_detectCollision.IsCollided && GameState.Instance.IsPlaying)
         {
             print("SLICE");
             Slice(_entityMeshFilter);

@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System;
 
 public class UIController : MonoBehaviour
 {
@@ -9,19 +10,26 @@ public class UIController : MonoBehaviour
 
     [SerializeField] private Animator _textHoldToPlayAnimator;
     [SerializeField] private Animator _panelChoiceAnimator;
+    [SerializeField] private Animator _panelEndOfGame;
 
     private bool _firstClick;
 
+    public Action GameRestarted;
+
     private void OnEnable()
     {
-        GameManager.Instance.GameStarted += OnStartGame;
-        GameManager.Instance.EndOfGame += OnEndGame;
+        GameState.Instance.GameStarted += OnStartGame;
+        GameState.Instance.EndOfGame += OnEndGame;
+        GameState.Instance.EntitySliced += OnEntitySlice;
+        GameState.Instance.GameWinned += OnGameWin;
     }
 
     private void OnDisable()
     {
-        GameManager.Instance.GameStarted -= OnStartGame;
-        GameManager.Instance.EndOfGame -= OnEndGame;
+        GameState.Instance.GameStarted -= OnStartGame;
+        GameState.Instance.EndOfGame -= OnEndGame;
+        GameState.Instance.EntitySliced -= OnEntitySlice;
+        GameState.Instance.GameWinned -= OnGameWin;
     }
 
     private void OnStartGame()
@@ -34,6 +42,8 @@ public class UIController : MonoBehaviour
     private void OnEndGame()
     {
         print("UICONTROLLER: END OF GAME");
+        _panelEndOfGame.SetBool("End", true);
+        _panelEndOfGame.SetBool("GameRestarted", false);
     }
 
     public void OnPlay()
@@ -43,6 +53,31 @@ public class UIController : MonoBehaviour
             _firstClick = true;
             _textHoldToPlayAnimator.SetBool("isPlaying", true);
         }
+    }
+
+    public void RestartGame()
+    {
+        GameRestarted?.Invoke();
+        _panelEndOfGame.SetBool("End", false);
+        _panelEndOfGame.SetBool("GameRestarted", true);
+        ShowChoice();
+    }
+
+    private void ShowChoice()
+    {
+        _panelEndOfGame.SetBool("End", false);
+        _panelChoiceAnimator.SetBool("Hide", false);
+        _firstClick = false;
+    }
+
+    private void OnEntitySlice()
+    {
+        ShowChoice();
+    }
+
+    private void OnGameWin()
+    {
+        
     }
 
     private IEnumerator PlayAnimation()

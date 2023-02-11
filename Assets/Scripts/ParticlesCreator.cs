@@ -1,8 +1,12 @@
 using UnityEngine;
+using System.Collections;
+using System.Collections.Generic;
 
 public class ParticlesCreator : MonoBehaviour
 {
-    [SerializeField] private GameObject _particlePrefab;
+    [SerializeField] private GameObject _slicePrefab;
+    [SerializeField] private ParticleSystem _particleSpawnEntity;
+    [SerializeField] private ParticleSystem _particleSlice;
     [SerializeField] private Transform _particleParent;
 
     [SerializeField] private Material _material;
@@ -12,7 +16,6 @@ public class ParticlesCreator : MonoBehaviour
 
     [SerializeField] private DetectCollision _detectCollision;
 
-    private float _timer;
     [SerializeField] private float _timeToParticle = 1;
 
     [SerializeField] private Vector3 _particleMinPosition, _particleMaxPosition;
@@ -20,31 +23,33 @@ public class ParticlesCreator : MonoBehaviour
 
     private void OnEnable()
     {
-        _detectCollision.Stay += CreateParticles;
+        _detectCollision.Collided += CreateSlices;
         _entity.EntityUpdated += ChangeEntityData;
+        _entity.EntityUpdated += EntityUpdated;
     }
 
     private void OnDisable()
     {
-        _detectCollision.Stay -= CreateParticles;
+        _detectCollision.Collided -= CreateSlices;
         _entity.EntityUpdated -= ChangeEntityData;
+        _entity.EntityUpdated -= EntityUpdated;
     }
 
     private void Start()
     {
         _entityData = _entity.EntityData;
-        _entity.EntityUpdated += EntityUpdated;
     }
 
     private void ChangeEntityData()
     {
         _entityData = _entity.EntityData;
-        _material.color = _entityData.Color;
+        _particleSlice.startColor = _entityData.Color;
     }
 
-    private void CreateEntityParticles()
+    private void InstantiateSlices()
     {
-        GameObject particle = Instantiate(_particlePrefab, _particleParent);
+        GameObject particle = Instantiate(_slicePrefab, _particleParent);
+        particle.GetComponent<MeshRenderer>().material.color = _entityData.Color;
         Vector3 position = new(
             Random.Range(_particleMinPosition.x, _particleMaxPosition.x),
             Random.Range(_particleMinPosition.y, _particleMaxPosition.y),
@@ -60,15 +65,31 @@ public class ParticlesCreator : MonoBehaviour
         particle.transform.SetPositionAndRotation(position, rotation);
     }
 
-    private void CreateParticles()
+    private void CreateSlices()
     {
-        _timer += Time.deltaTime;
-        if (_timer >= _timeToParticle)
+        StartCoroutine(CreateEntitySlices());
+    }
+
+    private IEnumerator CreateEntitySlices()
+    {
+        while (_detectCollision.IsCollided)
         {
-            for (int i = 0; i < Random.Range(4, 9); i++)
-                CreateEntityParticles();
-            _timer = 0;
+            if (!GameState.Instance.IsPlaying) break;
+            for (int i = 0; i < Random.Range(6, 12); i++)
+                InstantiateSlices();
+            CreateParticleSlice();
+            yield return new WaitForSeconds(_timeToParticle);
         }
+    }
+
+    public void CreateParticleSpawnEntity()
+    {
+        _particleSpawnEntity.Play();
+    }
+
+    private void CreateParticleSlice()
+    {
+        _particleSlice.Play();
     }
 
     private void EntityUpdated() => _entityData = _entity.EntityData;

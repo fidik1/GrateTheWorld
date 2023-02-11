@@ -26,7 +26,7 @@ Shader "Shader/Toony Transparent"
 	SubShader
 	{
 		Tags { "RenderType"="Opaque" "Queue" = "Geometry"}
-		
+
 		Stencil
 		{
 			Ref 0
@@ -98,7 +98,7 @@ Shader "Shader/Toony Transparent"
 		void surf (Input IN, inout SurfaceOutputCustom o)
 		{
 			fixed4 mainTex = tex2D(_MainTex, IN.uv_MainTex);
-			
+
 			o.Albedo = mainTex.rgb * _Color.rgb;
 			o.Alpha = mainTex.a * _Color.a;
 			

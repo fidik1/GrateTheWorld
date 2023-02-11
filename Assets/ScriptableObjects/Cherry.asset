@@ -12,5 +12,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 35c28faee37bbc342ac46bc74fff624f, type: 3}
   m_Name: Cherry
   m_EditorClassIdentifier: 
+  <Icon>k__BackingField: {fileID: -1624344584, guid: a9fa41b8ba13a8645bed45b67d8604c7, type: 3}
   <Model>k__BackingField: {fileID: 4300002, guid: da4eeef492c0d1842963d6576330682d, type: 3}
   <Color>k__BackingField: {r: 0.6886792, g: 0.04502483, b: 0, a: 1}
+  <Materials>k__BackingField:
+  - {fileID: 2100000, guid: e7e6a8a48facf0348be43376a936c1c7, type: 2}
+  - {fileID: 2100000, guid: 788b7214dc270cd42b6b44ace52b47bb, type: 2}
+  <Position>k__BackingField: {x: 0.5, y: -0.96, z: 0}
+  <Rotation>k__BackingField: {x: -15.5, y: 24.14, z: -16.6}
+  <PosColliderEnd>k__BackingField: {x: -0.765, y: 0.37, z: 0}
+  <PosColliderWin>k__BackingField: {x: -0.274, y: 0.37, z: 0}
+  <ScaleColliderEnd>k__BackingField: {x: 1, y: 3, z: 1}
+  <ScaleColliderWin>k__BackingField: {x: 0.79, y: 3, z: 1}

@@ -20,8 +20,15 @@ public class DetectCollision : MonoBehaviour
 
     private void OnTriggerStay(Collider other)
     {
-        Stay?.Invoke();
+        if (other.CompareTag("Terka"))
+        {
+            Stay?.Invoke();
+        }
     }
 
-    private void OnTriggerExit(Collider other) => IsCollided = false;
+    private void OnTriggerExit(Collider other)
+    {
+        if (other.CompareTag("Terka"))
+            IsCollided = false;
+    }
 }
