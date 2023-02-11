@@ -17,23 +17,25 @@ public class ChoiceEntity : MonoBehaviour
 
     private void OnEnable()
     {
-        GameState.Instance.GameRestarted += GameRestarted;
+        GameState.Instance.GameRestarted += UpdateChoices;
         GameState.Instance.EntitySliced += EntitySliced;
+        GameState.Instance.EntitySliced += UpdateChoices;
     }
 
     private void OnDisable()
     {
-        GameState.Instance.GameRestarted -= GameRestarted;
+        GameState.Instance.GameRestarted -= UpdateChoices;
         GameState.Instance.EntitySliced -= EntitySliced;
+        GameState.Instance.EntitySliced -= UpdateChoices;
     }
 
     private void Start()
     {
         SetChoice();
-        GameRestarted();
+        UpdateChoices();
     }
 
-    private void GameRestarted()
+    private void UpdateChoices()
     {
         _entity.UpdateObject(_entityDatas[0]);
         SetChoice();
