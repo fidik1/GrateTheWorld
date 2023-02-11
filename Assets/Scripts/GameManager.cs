@@ -17,6 +17,7 @@ public class GameManager : MonoBehaviour
 
     private void Awake()
     {
+        print("GAME MANAGER INITIALIZED");
         Instance = this;
     }
 

@@ -26,6 +26,7 @@ public class EntityMove : MonoBehaviour
 
     private void OnEnable()
     {
+        print(GameManager.Instance);
         GameManager.Instance.GameStarted += StartGame;
         GameManager.Instance.EndOfGame += EndOfGame;
     }
